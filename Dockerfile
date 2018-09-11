@@ -8,6 +8,8 @@ COPY ./package.json .
 
 RUN apt-get update \
     && apt-get install -y jq python git build-essential --no-install-recommends \
+    && apt-get install -y tcpdump \
+    && apt-get install -y net-tools \
     && npm install --production \
     && apt-get autoremove --purge -y python git build-essential \
     && rm -rf /var/lib/apt/lists/* \
