@@ -127,6 +127,65 @@ describe('aws-sdk test put bucket lifecycle', () => {
                 assertError(err, null, done));
         });
 
+        it('should allow lifecycle config with NoncurrentVersionTransitions', done => {
+            const params = getLifecycleParams({
+                key: 'NoncurrentVersionTransitions',
+                value: [{
+                    NoncurrentDays: 0,
+                    StorageClass: 'awsbackend',
+                }],
+            });
+            s3.putBucketLifecycleConfiguration(params, err =>
+                assertError(err, null, done));
+        });
+
+        it('should not allow lifecycle config with Transitions unknown StorageClass', done => {
+            const params = getLifecycleParams({
+                key: 'NoncurrentVersionTransitions',
+                value: [{
+                    NoncurrentDays: 0,
+                    StorageClass: 'unknown',
+                }],
+            });
+            s3.putBucketLifecycleConfiguration(params, err =>
+                assertError(err, null, done));
+        });
+
+        it('should allow lifecycle config with Transitions and Date', done => {
+            const params = getLifecycleParams({
+                key: 'Transitions',
+                value: [{
+                    Date: new Date,
+                    StorageClass: 'awsbackend',
+                }],
+            });
+            s3.putBucketLifecycleConfiguration(params, err =>
+                assertError(err, null, done));
+        });
+
+        it('should allow lifecycle config with Transitions and Date', done => {
+            const params = getLifecycleParams({
+                key: 'Transitions',
+                value: [{
+                    Days: 0,
+                    StorageClass: 'awsbackend',
+                }],
+            });
+            s3.putBucketLifecycleConfiguration(params, err =>
+                assertError(err, null, done));
+        });
+
+        it('should not allow lifecycle config with Transitions and unknown StorageClass', done => {
+            const params = getLifecycleParams({
+                key: 'Transitions',
+                value: [{
+                    Days: 0,
+                    StorageClass: 'unknown',
+                }],
+            });
+            s3.putBucketLifecycleConfiguration(params, err =>
+                assertError(err, null, done));
+        });
 
         describe('with Rule.Filter not Rule.Prefix', () => {
             before(done => {

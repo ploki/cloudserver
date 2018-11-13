@@ -14,15 +14,71 @@ const lifecycleConfig = {
         Expiration: {
             Days: 1,
         },
+        {
+            ID: 'test-id-1',
+            Status: 'Enabled',
+            Prefix: '',
+            NoncurrentVersionTransitions: {
+                NoncurrentDays: 0,
+                StorageClass: 'awsbackend',
+            },
+        },
+        {
+            ID: 'test-id-1',
+            Status: 'Enabled',
+            Prefix: '',
+            Transitions: [{
+                Date: new Date,
+                StorageClass: 'awsbackend',
+            },
+        },
+        {
+            ID: 'test-id-2',
+            Status: 'Enabled',
+            Prefix: '',
+            Transitions: [{
+                Days: 1,
+                StorageClass: 'awsbackend',
+            },
+        },
     }],
 };
 const expectedConfig = {
-    Expiration: { Days: 1 },
-    ID: 'test-id',
-    Filter: {},
-    Status: 'Enabled',
-    Transitions: [],
-    NoncurrentVersionTransitions: [],
+    Rules: [{
+        Expiration: { Days: 1 },
+        ID: 'test-id',
+        Filter: {},
+        Status: 'Enabled',
+        Transitions: [],
+        NoncurrentVersionTransitions: [],
+    },
+    {
+        ID: 'test-id-1',
+        Status: 'Enabled',
+        Prefix: '',
+        NoncurrentVersionTransitions: {
+            NoncurrentDays: 0,
+            StorageClass: 'awsbackend',
+        },
+    },
+    {
+        ID: 'test-id-1',
+        Status: 'Enabled',
+        Prefix: '',
+        Transitions: [{
+            Date: new Date,
+            StorageClass: 'awsbackend',
+        },
+    },
+    {
+        ID: 'test-id-2',
+        Status: 'Enabled',
+        Prefix: '',
+        Transitions: [{
+            Days: 1,
+            StorageClass: 'awsbackend',
+        },
+    }],
 };
 
 // Check for the expected error response code and status code.
@@ -82,7 +138,7 @@ describe('aws-sdk test get bucket lifecycle', () => {
                 (err, res) => {
                     assert.equal(err, null, 'Error getting lifecycle config: ' +
                         `${err}`);
-                    assert.deepStrictEqual(res.Rules[0], expectedConfig);
+                    assert.deepStrictEqual(res, expectedConfig);
                     done();
                 });
             });
